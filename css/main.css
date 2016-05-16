@@ -1,0 +1,654 @@
+﻿/* 
+ * CSS Document for 应用
+ * http://xxx.com/
+ *
+ * author wen
+ * http://www.xxx.com/
+ *
+ * Date: 2016-xx-xx
+ * 1、公用
+ * 2、加载
+ * 3、应用首页样式
+ * 4、应用列表
+ * 5、图片加密样式
+ * 6、LESS编译CSS
+ */
+
+/******************************
+        -	1、公用	-
+********************************/
+html,body{
+    height: 100%;
+}
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.3);
+    -webkit-border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4);
+    -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.bg_red{
+    background-color:#CF001F;
+}
+.bg_red1{
+    background-color:#F43C12;
+}
+.bg_red2{
+    background-color:#C3522F;
+}
+.bg_red3{
+    background-color:#D35400;
+}
+.bg_blue{
+    background-color:#1D64A2;
+}
+.bg_blue1{
+    background-color:#4198D9;
+}
+.bg_blue2{
+    background-color:#D35400;
+}
+.bg_green{
+    background-color:#2EA77B;
+}
+.bg_green1{
+    background-color:#52B054;
+}
+.bg_green2{
+    background-color:#1ABC9C;
+}
+.bg_green3{
+    background-color:#46BFBD;
+}
+.bg_yellow{
+    background-color:#F0DB4F;
+}
+.bg_yellow1{
+    background-color:#E0853B;
+}
+.bg_grey{
+    background-color:#222222;
+}
+.bg_grey1{
+    background-color:#1E2B33;
+}
+.bg_grey2{
+    background-color:#605E5E;
+}
+.bg_grey3{
+    background-color:#B9BFC1;
+}
+.embed_page {
+    width: 100%;
+    display: flex !important;
+    flex-grow: 1;
+    padding: 2em 0;
+}
+
+.box_normal{
+    display: block !important;
+    overflow: auto;
+}
+.flex-start{
+    align-items: flex-start !important;
+}
+.flex-center{
+    align-items: center !important;
+}
+
+/******************************
+        -	2、加载样式	-
+********************************/
+
+.loading{
+    display: none;
+    position: fixed;
+    height:100%;
+    width:100%;
+    background-color: #000;
+    z-index: 100;
+}
+.tp-loader 	{
+    top:50%; left:50%;
+    z-index:10000;
+    position:absolute;
+}
+.tp-loader.spinner1 {
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    margin-top:-20px;
+    margin-left:-20px;
+    -webkit-animation: tp-rotateplane 1.2s infinite ease-in-out;
+    animation: tp-rotateplane 1.2s infinite ease-in-out;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+@-webkit-keyframes tp-rotateplane {
+    0% { -webkit-transform: perspective(120px) }
+    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+@keyframes tp-rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+    } 50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+          -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+      } 100% {
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        }
+}
+.tp-loader.spinner2 {
+    width: 40px;
+    height: 40px;
+    margin-top:-20px;margin-left:-20px;
+    background-color: #ff0000;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    border-radius: 100%;
+    -webkit-animation: tp-scaleout 1.0s infinite ease-in-out;
+    animation: tp-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes tp-scaleout {
+    0% { -webkit-transform: scale(0.0) }
+    100% {
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+    }
+}
+
+@keyframes tp-scaleout {
+    0% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    } 100% {
+          transform: scale(1.0);
+          -webkit-transform: scale(1.0);
+          opacity: 0;
+      }
+}
+.tp-loader.spinner3 {
+    margin: -9px 0px 0px -35px;
+    width: 70px;
+    text-align: center;
+}
+.tp-loader.spinner3 .bounce1,
+.tp-loader.spinner3 .bounce2,
+.tp-loader.spinner3 .bounce3 {
+    width: 18px;
+    height: 18px;
+    background-color: #fff;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: tp-bouncedelay 1.4s infinite ease-in-out;
+    animation: tp-bouncedelay 1.4s infinite ease-in-out;
+    /* Prevent first frame from flickering when animation starts */
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.tp-loader.spinner3 .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+.tp-loader.spinner3 .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+@-webkit-keyframes tp-bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0.0) }
+    40% { -webkit-transform: scale(1.0) }
+}
+@keyframes tp-bouncedelay {
+    0%, 80%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    } 40% {
+          transform: scale(1.0);
+          -webkit-transform: scale(1.0);
+      }
+}
+.tp-loader.spinner4 {
+    margin: -20px 0px 0px -20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    -webkit-animation: tp-rotate 2.0s infinite linear;
+    animation: tp-rotate 2.0s infinite linear;
+}
+.tp-loader.spinner4 .dot1,
+.tp-loader.spinner4 .dot2 {
+    width: 60%;
+    height: 60%;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    background-color: #fff;
+    border-radius: 100%;
+    -webkit-animation: tp-bounce 2.0s infinite ease-in-out;
+    animation: tp-bounce 2.0s infinite ease-in-out;
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
+}
+.tp-loader.spinner4 .dot2 {
+    top: auto;
+    bottom: 0px;
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+@-webkit-keyframes tp-rotate { 100% { -webkit-transform: rotate(360deg) }}
+@keyframes tp-rotate {
+    100% {
+        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg)
+    }
+}
+@-webkit-keyframes tp-bounce {
+    0%, 100% { -webkit-transform: scale(0.0) }
+    50% { -webkit-transform: scale(1.0) }
+}
+@keyframes tp-bounce {
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    } 50% {
+          transform: scale(1.0);
+          -webkit-transform: scale(1.0);
+      }
+}
+/******************************
+        -	3、应用首页样式	-
+********************************/
+body {
+    overflow:hidden;
+    background:#000;
+    display: flex;
+    flex-direction: column;/*row | row-reverse | column | column-reverse;*/
+}
+.app_title{
+    -webkit-app-region: drag;
+    /*-webkit-app-region: no-drag;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;*/
+}
+.app_title_box{
+    padding:0 .5em;
+    display: flex;
+    height:35px;
+    align-items: center;
+}
+.app_title .app_name{
+    flex-grow: 1;
+    color:#fff;
+    margin-left: 1em;
+    text-shadow: 0 1px 1px #000;
+}
+.app_title i{
+    margin:0 5px;
+    color:#fff;
+    font-size: 17px;
+    cursor: pointer;
+    text-shadow: 0 1px 1px #000;
+    -webkit-app-region: no-drag;
+}
+.app_title .app_menu{
+
+}
+.app_title .app_min{
+
+}
+.app_title .app_max{
+
+}
+.app_title .app_close{
+    margin-top:-1px;
+    font-size:18px;
+}
+
+.app_page{
+    flex-grow: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+#stage {
+    width:200px;
+    height:300px;
+    position:absolute;
+    margin:0 auto;
+    margin-top:-150px;
+    left:0;
+    right:0;
+    top:40%;
+    background:null;
+    -webkit-transform:rotateX(-8deg) rotateY(0deg) perspective(2000px);
+    -moz-transform:rotateX(-8deg) rotateY(0deg) perspective(2000px);
+    -ms-transform:rotateX(-8deg) rotateY(0deg) perspective(2000px);
+    -o-transform:rotateX(-8deg) rotateY(0deg) perspective(2000px);
+    transform:rotateX(-8deg) rotateY(0deg) perspective(2000px);
+    -webkit-transform-style:preserve-3d;
+    -moz-transform-style:preserve-3d;
+    -ms-transform-style:preserve-3d;
+    -o-transform-style:preserve-3d;
+    transform-style:preserve-3d;
+}
+#shadow {
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:1200px;
+    height:1200px;
+    margin-left:-600px;
+    margin-top:-600px;
+    background:-webkit-radial-gradient(center center,600px 600px,rgba(50,50,50,1),rgba(0,0,0,0));
+    background:-moz-radial-gradient(center center,600px 600px,rgba(50,50,50,1),rgba(0,0,0,0));
+    background:-ms-radial-gradient(center center,600px 600px,rgba(50,50,50,1),rgba(0,0,0,0));
+    background:-o-radial-gradient(center center,600px 600px,rgba(50,50,50,1),rgba(0,0,0,0));
+    background:radial-gradient(center center,600px 600px,rgba(50,50,50,1),rgba(0,0,0,0));
+    -webkit-transform:translateY(200px) rotateX(90deg);
+    -moz-transform:translateY(200px) rotateX(90deg);
+    -ms-transform:translateY(200px) rotateX(90deg);
+    -o-transform:translateY(200px) rotateX(90deg);
+    transform:translateY(200px) rotateX(90deg);
+}
+#stage dd {
+    height:300px;
+    width:200px;
+    position:absolute;
+    left:0;
+    top:0;
+    border:1px solid #efefef;
+    -webkit-transition:500ms all ease;
+    -moz-transition:500ms all ease;
+    -ms-transition:500ms all ease;
+    -o-transition:500ms all ease;
+    transition:500ms all ease;
+    background:url(../images/bg.jpg);
+    /*-webkit-backface-visibility:hidden;--反面设置为不可见--
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    -ms-backface-visibility: hidden; */
+}
+#stage dd h1{
+    padding:45% .5em 20%;
+    text-align:center;
+    color:#787878;
+    font-size:2em;
+    -webkit-transition:500ms all ease;
+    -moz-transition:500ms all ease;
+    -ms-transition:500ms all ease;
+    -o-transition:500ms all ease;
+    transition:500ms all ease;
+}
+#stage .menu_txt{
+    width:100%;
+    height:100%;
+    cursor:pointer;
+    overflow:hidden;
+}
+#stage .menu_txt:hover h1,#stage .menu_txt:hover p{
+    color:#fff;
+}
+#stage dd p{
+    padding:0 1em;
+    font-size:.75em;
+    -webkit-transition:500ms all ease;
+    -moz-transition:500ms all ease;
+    -ms-transition:500ms all ease;
+    -o-transition:500ms all ease;
+    transition:500ms all ease;
+}
+.over {
+    position:absolute;
+    left:0;
+    top:320px;
+    width:200px;
+    height:300px;
+    overflow:hidden;
+    -webkit-transition:2s all ease;
+    -moz-transition:2s all ease;
+    -ms-transition:2s all ease;
+    -o-transition:2s all ease;
+    transition:2s all ease;
+    -webkit-transform:scale(1,-1);
+    -moz-transform:scale(1,-1);
+    -ms-transform:scale(1,-1);
+    -o-transform:scale(1,-1);
+    transform:scale(1,-1);
+    background-size:100% 100%;
+    opacity:0;
+}
+
+/******************************
+        -	4、应用列表	-
+********************************/
+.menu_page .menu_listbox{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+.menu_page .menu_list{
+    border:solid 5px #ccc;
+    width: 200px;
+    height: 200px;
+    margin: .5em;
+    overflow: hidden;
+    border-radius: 100%;
+    cursor:pointer;
+    -webkit-transition:500ms all ease;
+    -moz-transition:500ms all ease;
+    -ms-transition:500ms all ease;
+    -o-transition:500ms all ease;
+    transition:500ms all ease;
+}
+.menu_page .menu_list:hover{
+    box-shadow: 0 0 15px #fff;
+}
+.menu_page .menu_list h1{
+    color: #fff;
+    padding: 1.2em .2em .6em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.2em;
+}
+.menu_page .menu_list p{
+    margin-top: 1.5em;
+    line-height: 1.6em;
+    height: 6.4em;
+    overflow: hidden;
+    padding: 0 5px;
+    text-align: center;
+    color:#555;
+}
+
+/******************************
+        -	5、图片加密样式	-
+********************************/
+.encrypt,.encrypt body{
+    height:100%;
+    overflow: auto;
+    background-color: #fff;
+    -webkit-transition: all .2s;
+    -o-transition: all .2s;
+    transition: all .2s;
+}
+.encrypt_page{
+    flex-direction: column;
+}
+.encrypt_title{
+    width:80%;
+    min-width: 450px;
+    min-height: 35px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+.encrypt_title h1{
+    flex-grow: 1;
+}
+.encrypt_picbox{
+    width:80%;
+    flex-grow: 1;
+    min-width: 450px;
+    min-height: 200px;
+    margin: 1em auto;
+    border:dashed 2px #ccc;
+    display: flex;
+    align-items: center;
+    /*align-items: flex-start;*/
+    justify-content: center;
+    padding:1em 0;
+    overflow: auto;
+}
+.encrypt_tips{
+    text-align: center;
+    padding:100px 1em 0;
+    color:#ccc;
+    font-size:1.25em;
+    background: url("../images/ico_t.png") no-repeat center top;
+}
+.select_file{
+    opacity: 0;
+    height:100%;
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.encrypt_picbox ul{
+    padding:1em;
+}
+.encrypt_picbox li{
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:solid 1px #ccc;
+    margin:10px;
+    width:100px;
+    height:100px;
+    position: relative;
+}
+.del_encrypt{
+    position: absolute;
+    right:0;
+    top:0;
+    color: red;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    line-height: 2em;
+    border: solid 1px red;
+    border-radius: 100%;
+    cursor: pointer;
+}
+.encrypt_picbox li img{
+    max-width:100%;
+    max-height:100%;
+}
+.encrypt_cz_box{
+    width:80%;
+    min-width: 450px;
+    margin:0 auto 1em;
+    display: flex;
+    min-height: 40px;
+}
+.encrypt_cz_box label{
+    width:7em;
+    flex-grow: 0;
+    min-width: 7em;
+    max-width: 7em;
+    display: flex;
+    align-items: center;
+}
+.encrypt_cz_box input{
+    padding:.5em;
+    width: auto;
+    flex-grow: 1;
+    min-width: 5em;
+}
+.encrypt_cz_box button {
+    padding: .5em 0;
+    width:5em;
+    flex-grow: 0;
+    min-width: 5em;
+    max-width: 5em;
+}
+.encrypt_btn,.clear_all{
+    margin-left:1em;
+}
+.decode_cz_box{
+    display: none;
+    margin-top:1em;
+    min-height: 40px;
+}
+
+/******************************
+        -	6、LESS编译CSS	-
+********************************/
+.now_less{
+    display: none;
+    justify-content: center;
+    min-width: 450px;
+    width: 80%;
+    margin: 1em auto;
+    flex-grow: 1;
+    align-items: stretch;
+    overflow: auto;
+}
+.now_lessbox{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.now_lessbox textarea{
+    resize: none;
+    flex-grow: 1;
+}
+.now_lessbox p{
+    text-align: center;
+}
+.encode_ico{
+    margin: 0 1em;
+    color: #ccc;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+.less_file_list{
+    width:90%;
+}
+.less_file_list p{
+    position: relative;
+    margin: 1em 0;
+    border-bottom: dashed 1px #ccc;
+    padding-bottom: .5em;
+}
+.less_file_list .del_less{
+    position: absolute;
+    top: -.5em;
+    right: 0;
+    padding: .5em;
+    cursor: pointer;
+}

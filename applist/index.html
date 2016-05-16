@@ -1,0 +1,377 @@
+<!--<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+
+</head>
+<body>-->
+<style type="text/css">
+	*{
+		margin:0;
+		padding:0;
+	}
+	body{
+		background-color: #000;
+		-webkit-backface-visibility: hidden;
+	}
+	.section{
+		padding:2em;
+	}
+	h1{
+		font-size:1em;
+		margin-bottom:.5em;
+	}
+	hr{
+		height:0;
+		border:0;
+		font-size:0;
+		margin:20px 0;
+		border-bottom:dashed 1px #bbb;
+	}
+	textarea{
+		width:50%;
+		height:60px;
+		display:block;
+		border:solid 1px #ccc;
+		margin-bottom:2em;
+		resize: none;
+		outline:none;
+	}
+	button{
+		padding:.5em 3em;
+	}
+	.picBox,.encodePic{
+		border:solid 1px #ccc;
+		border-radius:8px;
+		padding:1em;
+	}
+	.picBox span{
+		display:inline-block;
+		height:80px;
+		width:80px;
+		overflow: hidden;
+		border:solid 1px #efefef;
+		margin:0 15px 15px 0;
+		line-height:80px;
+		text-align:center;
+		font-size:0;
+	}
+	.picBox span img{
+		max-width:100%;
+		max-height:100%;
+		vertical-align:middle;
+	}
+
+
+</style>
+<div class="loading">
+	<div class="tp-loader spinner4">
+		<div class="dot1"></div>
+		<div class="dot2"></div>
+		<div class="bounce1"></div>
+		<div class="bounce2"></div>
+		<div class="bounce3"></div>
+	</div>
+</div>
+
+<section class="section">
+    <h1>选择加密图片</h1>
+    <div class="picBox" id="picBox">
+    	<input type="file" id="selectPic" multiple />
+    </div>
+    <hr/>
+    <h1>输入加密信息</h1>
+    <textarea id="copyrightTxt"></textarea>
+    <button id="encrypt" type="button">加密</button>
+    <hr/>
+    <h1>这里是经过加密的图片</h1>
+    <div class="picBox" id="encodePic">
+    
+    </div>
+	<hr/>
+	<h1>选择保存路径</h1>
+	<div>
+		保存到：<input type="text" class="show_path" readonly style="padding:.5em;width:300px;margin-right: 1em;" /><button type="button" class="select_path" style="padding:.5em;">选择...</button>
+	</div>
+</section>
+
+<script type="text/javascript">
+	const dialog = require('electron').remote.dialog;//require('electron').remote
+	const fs = require("fs");
+	window.$ = window.jQuery = require("./js/jquery-2.2.3.min.js");
+
+	/*fs.writeFile("C:/Users/20160309/Desktop/新建文件夹/新建文件夹/2.txt", "123" , function(){
+		console.log("保存？");
+	});*/
+
+	$(function(){
+		window.setTimeout(function(){
+			$(".loading").fadeOut();
+			$("body").css("background-color","#fff");
+		},1000)
+	});
+	$(".select_path").on("click",function(){
+		dialog.showOpenDialog({
+			title:"选择保存加密图片路径",
+			properties:['openDirectory']//['openFile','openDirectory', 'multiSelections']
+		},function(path){
+			console.log(path[0]);
+			$(".show_path").val(path[0]);
+		});
+	});
+
+</script>
+<script>
+var selectPic = document.getElementById("selectPic");
+var copyrightTxt = document.getElementById("copyrightTxt");
+var encryptBtn = document.getElementById("encrypt");
+
+var picBox = document.getElementById("picBox");
+var encodePic = document.getElementById("encodePic");
+var files = [],encryptFiles = [],savePath="";
+
+selectPic.addEventListener("change",function(){
+	var l = selectPic.files.length,i = 0,imgN = 0;
+	if(l>0){
+		var checkType = true,getpath = true;
+		for(;i<l;i++){
+			var file = selectPic.files[i];
+			getpath?savePath=file.path:"";
+			function readfile(file,i){
+				var reader = new FileReader();
+				if(/image\/png/.test(file.type)||/image\/jpg/.test(file.type)||/image\/jpeg/.test(file.type)) {
+					imgN += 1;
+					reader.onload = function() {
+						var img = new Image();
+						img.onload = function(){
+							var h = img.height;
+							var w = img.width;
+
+							var canv = document.createElement("canvas");
+							canv.id = "oldPic"+i;
+							canv.setAttribute("height",h);
+							canv.setAttribute("width",w);
+							canv.style.display = "none";
+							document.body.appendChild(canv);
+
+							var ctx = canv.getContext('2d');
+							ctx.drawImage(img, 0, 0);
+							// 获取指定区域的canvas像素信息
+							var oldData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+							var f = {};
+							f.name = file.name;
+							f.id = "oldPic"+i;
+							f.data = oldData;
+							files.push(f);
+
+							var span = document.createElement("span");
+							span.appendChild(img);
+							picBox.appendChild(span);
+						}
+						img.src = this.result;
+					}
+					reader.readAsDataURL(file);
+				}else{
+					if(checkType){
+						alert("非png/jpg图片文件，将自动忽略");
+						checkType = false;
+					}
+				}
+			}
+
+			readfile(file,i);
+
+		}
+		if(!imgN){
+			selectPic.value = "";
+			files=[];
+		}else{
+			selectPic.style.display = "none";
+		}
+	}
+},false);
+
+encryptBtn.addEventListener("click",function(){
+	var pic = selectPic.value;
+	var txt = copyrightTxt.value;
+	var i = 0,l = files.length;
+	if((!pic)||(!txt)||l==0){
+		alert("请选择要加密的图片并输入加密信息！");
+		return false;
+	}
+
+	if(!!$(".show_path").val()){
+		savePath = savePath.replace(/\\/g,"/");
+	}else{
+		savePath = savePath.replace(/[\/|\\]\w+\.(jpg|png)/,"");
+		savePath = savePath.replace(/\\/g,"/")+'/encrypt';
+		if(!fs.existsSync(savePath)){
+			fs.mkdirSync(savePath);
+		}
+	}
+	for(;i<l;i++){
+		var h = files[i].data.height;
+		var w = files[i].data.width;
+		var oldData = files[i].data;
+		var canvTxt = document.createElement("canvas");
+		canvTxt.setAttribute("height",h);
+		canvTxt.setAttribute("width",w);
+		
+		//var ctx1 = document.getElementById('canvTxt').getContext('2d');	
+		var ctx1 = canvTxt.getContext('2d');	
+		ctx1.font = '20px bold';
+		ctx1.fillStyle = 'red';
+		ctx1.textAlign="center";
+		ctx1.fillText(txt, w*.5, h*.5);
+		var newData = ctx1.getImageData(0, 0, ctx1.canvas.width, ctx1.canvas.height).data;
+		//console.log(newData);
+		
+		var encrypt_1 = new copyrightPic();
+		var newPic = encrypt_1.mergeData(oldData,newData);
+		ctx1.putImageData(newPic, 0, 0);
+		
+		//更新files数组对应的data
+		files[i].data.data = newPic;
+		//修改保存的图片类型，但会毁坏加密信息（加密信息只支持png格式）
+		var newImg = new Image();
+		//参数1：类型；参数2：质量（清晰度）
+		//newImg.src = ctx1.canvas.toDataURL("image/jpeg",.2);
+		newImg.src = ctx1.canvas.toDataURL();
+
+		var picBuffer = ctx1.canvas.toDataURL().replace(/^data:image\/\w+;base64,/, "");
+		var dataBuffer = new Buffer(picBuffer, 'base64');
+		fs.writeFile(savePath + '/' +Date.now()+".png", dataBuffer , function(){
+			console.log("保存？");
+		});
+		
+		var span = document.createElement("span");
+		span.appendChild(newImg);
+		encodePic.appendChild(span);
+
+	}
+
+	dialog.showMessageBox({
+		type:"none",//"none", "info", "error", "question" 或 "warning"
+		buttons:["确定"],
+		defaultId:0,
+		title:"加密提示",
+		message:"加密完成！",
+		//detail:"额外信息",
+		//icon:"",
+		cancelId:0,
+		//noLink:true
+	},function(){
+
+	});
+	
+},false);
+
+
+function copyrightPic(obj){
+	//this.picSrc = obj.pic;
+	//this.txt = obj.txt;
+	//this.logoSrc = obj.logo;
+	
+}
+
+copyrightPic.prototype = {
+	//加密
+	mergeData : function(oldData, newData, color){
+		var color = color||"R";
+		var oData = oldData.data;
+		var bit, offset;  // offset的作用是找到alpha通道值，这里需要大家自己动动脑筋
+	 
+		switch(color){
+			case 'R':
+				bit = 0;
+				offset = 3;
+				break;
+			case 'G':
+				bit = 1;
+				offset = 2;
+				break;
+			case 'B':
+				bit = 2;
+				offset = 1;
+				break;
+		}
+	 
+		for(var i = 0; i < oData.length; i++){
+			if(i % 4 == bit){
+				// 只处理目标通道
+				if(newData[i + offset] === 0 && (oData[i] % 2 === 1)){
+					// 没有信息的像素，该通道最低位置0，但不要越界
+					if(oData[i] === 255){
+						oData[i]--;
+					} else {
+						oData[i]++;
+					}
+				} else if (newData[i + offset] !== 0 && (oData[i] % 2 === 0)){
+					// 有信息的像素，该通道最低位置1，可以想想上面的斑点效果是怎么实现的
+					oData[i]++;
+					
+					//处理透明通道
+					if(oData[i+offset] === 0){
+						oData[i + offset] = 1;
+						oData[i] = newData[i];
+					}
+				}
+			}
+		}
+		//ctx.putImageData(orginalData, 0, 0);
+		return oldData;
+	},
+	
+	//解密
+	processData : function(originalData,color){
+		var color = color||"R";
+		var data = originalData.data;
+		var bit, offset;  
+		
+		switch(color){
+			case 'R':
+				bit = 0;
+				offset = 3;
+				break;
+			case 'G':
+				bit = 1;
+				offset = 2;
+				break;
+			case 'B':
+				bit = 2;
+				offset = 1;
+				break;
+		}
+		
+		for(var i = 0; i < data.length; i++){
+			if(i % 4 == bit){
+				// 红色分量
+				if(data[i] % 2 == 0){
+					data[i] = 0;
+				} else {
+					data[i] = 255;
+					data[i+offset] = 255;
+				}
+			} else if(i % 4 == offset){
+				// alpha通道不做处理
+				continue;
+        	}else{
+				// 关闭其他分量，不关闭也不影响答案，甚至更美观 o(^▽^)o
+				//data[i] = 0;
+			}
+		}
+		// 将结果绘制到画布
+		//ctx.putImageData(originalData, 0, 0);
+		return originalData;
+	}
+
+}
+
+</script>
+
+<!--
+</body>
+</html>
+-->

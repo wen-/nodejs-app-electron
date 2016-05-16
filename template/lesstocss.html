@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>nodejs应用</title>
+	<link href="../css/reset.css" type="text/css" rel="stylesheet" />
+	<link href="../css/main.css" type="text/css" rel="stylesheet" />
+	<link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<style type="text/css">
+body{
+	background-color: #fff;
+}
+.now_less{
+	display: flex;
+	justify-content: center;
+	min-width: 558px;
+	width: 80%;
+	margin: 1em auto;
+	flex-grow: 1;
+	align-items: stretch;
+	overflow: auto;
+}
+.now_lessbox{
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+}
+.now_lessbox textarea{
+	resize: none;
+	flex-grow: 1;
+}
+.now_lessbox p{
+	text-align: center;
+}
+.encode_ico{
+	margin: 0 1em;
+	color: #ccc;
+	font-size: 20px;
+	display: flex;
+	align-items: center;
+}
+
+</style>
+<section class="section encrypt_page embed_page">
+	<div class="encrypt_title clearfix">
+		<h1 class="lfloat">LESS 编译 CSS</h1>
+		<button type="button" class="rfloat button trigger_encrypt on" id="triggerLess">实时编译</button>
+	</div>
+	<div class="encrypt_picbox" id="lessBox">
+		<p class="encrypt_tips pr"><input type="file" class="select_file" id="selectLess" multiple />点击选择要编译的LESS文件，或直接将LESS文件拖拽到虚线框内</p>
+	</div>
+	<div class="now_less">
+		<div class="now_lessbox">
+			<textarea class="less_txt"></textarea>
+			<p>less</p>
+		</div>
+		<div class="encode_ico"><i class="fa fa-share" aria-hidden="true"></i></div>
+		<div class="now_lessbox">
+			<textarea class="css_txt"></textarea>
+			<p>css</p>
+		</div>
+	</div>
+	<div class="encrypt_cz_box">
+		<label>选择保存路径:</label>
+		<input type="text" class="show_path" readonly />
+		<button type="button" class="encrypt_select_path" id="encryptSelectPath">选择...</button>
+		<button type="button" class="encrypt_btn" id="lessEncrypt">编译</button>
+	</div>
+	<div class="decode_cz_box tc" style="display: none;">
+		<button type="button" class="button encrypt_decode" id="nowLessEncrypt">编译</button>
+		<button type="button" class="button clear_all encrypt_clear_all">清空</button>
+	</div>
+</section>
+
+</body>
+</html>

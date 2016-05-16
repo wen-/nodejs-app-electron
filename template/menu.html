@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>nodejs应用</title>
+	<link href="../css/reset.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<style type="text/css">
+	.menu_page .menu_listbox{
+		display: flex;
+		justify-content: space-around;
+		align-items: flex-end;
+		flex-wrap: wrap;
+	}
+	.menu_page .menu_list{
+		border:solid 5px #ccc;
+		width: 200px;
+		height: 200px;
+		margin: .5em;
+		overflow: hidden;
+		border-radius: 100%;
+		cursor:pointer;
+		-webkit-transition:500ms all ease;
+		-moz-transition:500ms all ease;
+		-ms-transition:500ms all ease;
+		-o-transition:500ms all ease;
+		transition:500ms all ease;
+	}
+	.menu_page .menu_list:hover{
+		box-shadow: 0 0 15px #fff;
+	}
+	.menu_page .menu_list h1{
+		color: #fff;
+		padding: 1.2em .2em .6em;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-size: 1.2em;
+	}
+	.menu_page .menu_list p{
+		margin-top: 1.5em;
+		line-height: 1.6em;
+		height: 6.4em;
+		overflow: hidden;
+		padding: 0 5px;
+		text-align: center;
+		color:#555;
+	}
+</style>
+<section class="section menu_page embed_page">
+	<div class="menu_listbox">
+		<div class="menu_list" style="border-color: yellow;">
+			<h1 class="bg_red" style="background-color: yellow;">这里是标题</h1>
+			<p>这里是内容这里是内容这里是内容这里是内容这里是内容</p>
+		</div>
+	</div>
+</section>
+
+</body>
+</html>

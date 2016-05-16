@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>nodejs应用</title>
+    <link href="css/reset.css" type="text/css" rel="stylesheet" />
+    <link href="css/animate.min.css" type="text/css" rel="stylesheet" />
+    <link href="js/jquery-ui/jquery-ui.css" type="text/css" rel="stylesheet" />
+    <link href="css/font-awesome.css" type="text/css" rel="stylesheet" />
+    <link href="css/main.css" type="text/css" rel="stylesheet" />
+    <script src="js/public.js"></script>
+    <script src="js/jquery-ui/jquery-ui.js"></script>
+    <script src="js/encrypt.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script>
+        /*window.addEventListener( 'dragover', function( e ){
+            console.log("dragover");
+            // 阻止默认事件的触发
+            e.preventDefault();
+            //e.dataTransfer.effectAllowed = 'none';
+            //e.dataTransfer.dropEffect = 'none';
+            //return false;
+        }, false );
+
+        window.addEventListener( 'drop', function( e ){
+            console.log("drop");
+            //var dt = e.dataTransfer,item, reader;
+            // 阻止默认事件的触发
+            e.preventDefault();
+        }, false );*/
+        /*$(document).on("drag",function(e){
+            console.log("drag");
+            e.preventDefault();
+        });
+         $(document).on("dragstart",function(e){
+         console.log("dragstart");
+         e.preventDefault();
+         });
+        $(document).on("dragend",function(e){
+            console.log("dragend");
+            e.preventDefault();
+        });
+        $(document).on("dragenter",function(e){
+            console.log("dragenter");
+            e.preventDefault();
+        });
+        $(document).on("dragexit",function(e){
+            console.log("dragexit");
+            e.preventDefault();
+        });
+        $(document).on("dragleave",function(e){
+            console.log("dragleave");
+            e.preventDefault();
+        });*/
+        $(document).on("dragover",function(e){
+            console.log("dragover");
+            e.preventDefault();
+            e.originalEvent.dataTransfer.dropEffect = 'none';
+            e.originalEvent.dataTransfer.effectAllowed = 'none';
+            return false;
+        });
+        $(document).on("drop",function(e){
+            console.log("drop");
+            e.preventDefault();
+            return false;
+        });
+    </script>
+</head>
+<body>
+
+<div class="loading">
+    <div class="tp-loader spinner4">
+        <div class="dot1"></div>
+        <div class="dot2"></div>
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+</div>
+
+<!--模拟标题栏-->
+<div class="app_title">
+    <div class="app_title_box">
+        <div class="app_name">nodejs应用</div>
+        <i title="查看全部应用" class="fa fa-th-large app_menu" aria-hidden="true"></i>
+        <i title="最小化窗口" class="fa fa-minus-square-o app_min" aria-hidden="true"></i>
+        <i title="最大化窗口" class="fa fa-plus-square-o app_max" aria-hidden="true"></i>
+        <i title="关闭" class="fa fa-times app_close" aria-hidden="true"></i>
+    </div>
+</div>
+
+<div class="app_page">
+<!--卡片菜单项-->
+<div id="stage"></div>
+</div>
+
+<!--应用设置
+<script>
+    const remote = require('electron').remote;
+    const Menu = remote.Menu;
+    const MenuItem = remote.MenuItem;
+
+    var menu = new Menu();
+
+    //右键菜单设置
+    menu.append(new MenuItem({ label: 'MenuItem1', click: function() { console.log('item 1 clicked'); } }));
+    menu.append(new MenuItem({ type: 'separator' }));//分隔线
+    menu.append(new MenuItem({ label: 'MenuItem2', type: 'checkbox', checked: true }));
+    //右键监听
+    window.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+        menu.popup(remote.getCurrentWindow());
+    }, false);
+
+    //菜单项
+    var template = [
+        {
+            label: '编辑',
+            submenu: [
+                {
+                    label: '取消',
+                    accelerator: 'CmdOrCtrl+Z',
+                    role: 'undo'
+                },
+                {
+                    label: '恢复',
+                    accelerator: 'Shift+CmdOrCtrl+Z',
+                    role: 'redo'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: '剪切',
+                    accelerator: 'CmdOrCtrl+X',
+                    role: 'cut'
+                },
+                {
+                    label: '复制',
+                    accelerator: 'CmdOrCtrl+C',
+                    role: 'copy'
+                },
+                {
+                    label: '粘贴',
+                    accelerator: 'CmdOrCtrl+V',
+                    role: 'paste'
+                },
+                {
+                    label: '全选',
+                    accelerator: 'CmdOrCtrl+A',
+                    role: 'selectall'
+                },
+            ]
+        },
+        {
+            label: '视图',
+            submenu: [
+                {
+                    label: '刷新',
+                    accelerator: 'CmdOrCtrl+R',
+                    click: function(item, focusedWindow) {
+                        if (focusedWindow){
+                            focusedWindow.reload();
+                        }
+                    }
+                },
+                {
+                    label: '切换全屏',
+                    accelerator: (function() {
+                        if (process.platform == 'darwin') {
+                            return 'Ctrl+Command+F';
+                        }else{
+                            return 'F11';
+                        }
+                    })(),
+                    click: function(item, focusedWindow) {
+                        if (focusedWindow){
+                            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+                        }
+                    }
+                },
+                {
+                    label: '开发者工具',
+                    accelerator: (function() {
+                        if (process.platform == 'darwin'){
+                            return 'Alt+Command+I';
+                        }else{
+                            return 'Ctrl+Shift+I';
+                        }
+                    })(),
+                    click: function(item, focusedWindow) {
+                        if (focusedWindow){
+                            focusedWindow.toggleDevTools();
+                        }
+                    }
+                },
+            ]
+        },
+        {
+            label: '窗口',
+            role: 'window',
+            submenu: [
+                {
+                    label: '最小化',
+                    accelerator: 'CmdOrCtrl+M',
+                    role: 'minimize'
+                },
+                {
+                    label: '关闭',
+                    accelerator: 'CmdOrCtrl+W',
+                    role: 'close'
+                },
+            ]
+        },
+        {
+            label: '帮助',
+            role: 'help',
+            submenu: [
+                {
+                    label: '了解更多',
+                    click: function() { require('electron').shell.openExternal('http://electron.atom.io') }
+                },
+            ]
+        },
+    ];
+
+    if (process.platform == 'darwin') {
+        var name = require('electron').remote.app.getName();
+        template.unshift({
+            label: name,
+            submenu: [
+                {
+                    label: '关于 ' + name,
+                    role: 'about'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: '服务',
+                    role: 'services',
+                    submenu: []
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Hide ' + name,
+                    accelerator: 'Command+H',
+                    role: 'hide'
+                },
+                {
+                    label: 'Hide Others',
+                    accelerator: 'Command+Alt+H',
+                    role: 'hideothers'
+                },
+                {
+                    label: 'Show All',
+                    role: 'unhide'
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Quit',
+                    accelerator: 'Command+Q',
+                    click: function() { app.quit(); }
+                },
+            ]
+        });
+        // Window menu.
+        template[3].submenu.push(
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Bring All to Front',
+                    role: 'front'
+                }
+        );
+    }
+    //应用菜单项设置
+    var menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+</script>
+
+-->
+
+</body>
+</html>

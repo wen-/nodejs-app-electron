@@ -913,11 +913,108 @@ $( function(){
         }
     },".del_less");
 
-    //编译
+    //编译文件
     $(".app_page").on("click","#lessEncrypt",function() {
         console.log(lessFiles);
+        /*字符串编译
+        less.render('.class { width: (1 + 1) }', function (e, output) {
+            console.log(output.css);
+        });*/
+        //文件编译
+        var FL = lessFiles.length,current = 0;
+        var savePath = $(".show_path").val();
+        savePath = savePath?savePath.replace(/\\/g,"/"):undefined;
+        if(FL){
+            $.each(lessFiles,function(i,n){
+                encodeLess(n,savePath);
+
+            });
+        }else{
+            dialog.showMessageBox({
+                type:"warning",//"none", "info", "error", "question" 或 "warning"
+                buttons:["确定"],
+                defaultId:0,
+                title:"提示",
+                message:"请选择要编译的less文件",
+                cancelId:0
+            },function(){
+
+            });
+        }
+        //less编译方法
+        function encodeLess(n,newPath){
+            var fileName = n.name.replace(/\.less$/,".css"),pathName,path;
+            pathName = n.path.replace(/\\/g,"/");
+            if(newPath){
+                path = newPath;
+            }else{
+                path = pathName.replace(/\/\w+\.less$/,"");
+            }
+
+            fs.readFile(pathName, 'utf8', function(e, data) {
+                if (!e) {
+                    less.render(data, function(e, css) {
+                        console.log(css.css);
+                        fs.writeFile(path+"/"+fileName,css.css, 'utf8', function(e, data) {
+                            if (!e) {
+                                current += 1;
+                                if(current == FL){
+                                    dialog.showMessageBox({
+                                        type:"info",//"none", "info", "error", "question" 或 "warning"
+                                        buttons:["确定"],
+                                        defaultId:0,
+                                        title:"提示",
+                                        message:"所有less文件已编译完成",
+                                        detail:"编译文件保存在："+ path,
+                                        cancelId:0
+                                    },function(){
+
+                                    });
+                                }
+                            }
+                        });
+                    })
+                }
+            });
+        }
+
     });
 
+    //实时编译
+    $(".app_page").on("click","#nowLessEncrypt",function() {
+        var txt = $.trim($(".less_txt").val());
+        if(txt){
+            //字符串编译
+             less.render(txt, function (e, output) {
+                 if(output.css){
+                     $(".css_txt").val(output.css);
+                 }else{
+                     dialog.showMessageBox({
+                         type:"error",//"none", "info", "error", "question" 或 "warning"
+                         buttons:["确定"],
+                         defaultId:0,
+                         title:"提示",
+                         message:"编译出错，请检查less代码",
+                         cancelId:0
+                     },function(){
+
+                     });
+                 };
+             });
+        }else{
+            dialog.showMessageBox({
+                type:"warning",//"none", "info", "error", "question" 或 "warning"
+                buttons:["确定"],
+                defaultId:0,
+                title:"提示",
+                message:"请输入要编译的less代码",
+                cancelId:0
+            },function(){
+
+            });
+        }
+
+    });
 
 
 

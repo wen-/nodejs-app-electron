@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": ""
+		"url": "git+https://github.com/electron/electron-quick-start.git"
 	},
 	"keywords": [
 		"Electron",
@@ -22,7 +22,10 @@
 		"url": ""
 	},
 	"homepage": "",
+	"devDependencies": {
+		"electron-prebuilt": "^0.37.0"
+	},
 	"dependencies": {
-		"less":"2.7.1"
+		"html2jade":"0.8.4"
 	}
 }

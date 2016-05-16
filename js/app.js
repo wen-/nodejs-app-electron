@@ -20,6 +20,7 @@ const remote = require('electron').remote;
 const win = remote.getCurrentWindow();
 const dialog = remote.dialog;
 const fs = require("fs");
+const less = require('less');
 
 $(".button").button();
 $(document).on("click",".app_max",function(){
@@ -759,7 +760,7 @@ $( function(){
         var $this = $(this);
         if($this.hasClass("on")){
             $this.button( "option", "label", "编译文件" );
-            $(".decode_cz_box").show().css({"opacity":0}).animate({"opacity":1},1000);;
+            $(".decode_cz_box").show().css({"opacity":0}).animate({"opacity":1},1000);
             $(".now_less").css({"display":"flex","opacity":0}).animate({"opacity":1},1000);
             $(".encrypt_cz_box,.encrypt_picbox").hide();
             $this.removeClass("on");
@@ -911,5 +912,13 @@ $( function(){
             $(this).removeClass("animated rotateIn").css("color","#000");
         }
     },".del_less");
+
+    //编译
+    $(".app_page").on("click","#lessEncrypt",function() {
+        console.log(lessFiles);
+    });
+
+
+
 
 });

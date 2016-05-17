@@ -878,13 +878,7 @@ $( function(){
 
     //清空
     $(".app_page").on("click","#encryptClearLess",function(){
-        $("#selectless").val("");
-        lessFiles=[];
-        lessSavePath="";
-        lessN = 0;
-        $(".encrypt_tips").show();
-        $("#lessBox ul").remove();
-        $("#lessBox").removeClass("flex-start");
+        $(".less_txt,.css_txt").val("");
     });
     //删除
     $(".app_page").on({
@@ -916,18 +910,24 @@ $( function(){
     //编译文件
     $(".app_page").on("click","#lessEncrypt",function() {
         console.log(lessFiles);
-        /*字符串编译
-        less.render('.class { width: (1 + 1) }', function (e, output) {
-            console.log(output.css);
-        });*/
         //文件编译
         var FL = lessFiles.length,current = 0;
         var savePath = $(".show_path").val();
         savePath = savePath?savePath.replace(/\\/g,"/"):undefined;
+
+        if(!!$(".show_path").val()){
+            lessSavePath = $(".show_path").val().replace(/\\/g,"/");
+        }else{
+            lessSavePath = lessSavePath.replace(/[\/|\\]\w+\.less/,"");
+            lessSavePath = lessSavePath.replace(/\\/g,"/")+'/css';
+            if(!fs.existsSync(lessSavePath)){
+                fs.mkdirSync(lessSavePath);
+            }
+        }
+
         if(FL){
             $.each(lessFiles,function(i,n){
-                encodeLess(n,savePath);
-
+                encodeLess(n,lessSavePath);
             });
         }else{
             dialog.showMessageBox({
@@ -943,19 +943,13 @@ $( function(){
         }
         //less编译方法
         function encodeLess(n,newPath){
-            var fileName = n.name.replace(/\.less$/,".css"),pathName,path;
+            var fileName = n.name.replace(/\.less$/,".css"),pathName;
             pathName = n.path.replace(/\\/g,"/");
-            if(newPath){
-                path = newPath;
-            }else{
-                path = pathName.replace(/\/\w+\.less$/,"");
-            }
-
             fs.readFile(pathName, 'utf8', function(e, data) {
                 if (!e) {
                     less.render(data, function(e, css) {
                         console.log(css.css);
-                        fs.writeFile(path+"/"+fileName,css.css, 'utf8', function(e, data) {
+                        fs.writeFile(newPath+"/"+fileName,css.css, 'utf8', function(e, data) {
                             if (!e) {
                                 current += 1;
                                 if(current == FL){
@@ -965,7 +959,7 @@ $( function(){
                                         defaultId:0,
                                         title:"提示",
                                         message:"所有less文件已编译完成",
-                                        detail:"编译文件保存在："+ path,
+                                        detail:"编译文件保存在："+ newPath,
                                         cancelId:0
                                     },function(){
 

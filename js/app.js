@@ -440,6 +440,13 @@ $( function(){
             $(".encrypt_cz_box").show();
             $this.addClass("on");
         }
+        $("#selectPic").val("");
+        files=[];
+        savePath="";
+        imgN = 0;
+        $(".encrypt_tips").show();
+        $("#picBox").removeClass("box_normal flex-start");
+        $("#picBox ul,#picBox canvas").remove();
 
     });
 
@@ -640,7 +647,7 @@ $( function(){
             savePath = $(".show_path").val().replace(/\\/g,"/");
         }else{
             savePath = savePath.replace(/[\/|\\]\w+\.(jpg|png)/,"");
-            savePath = savePath.replace(/\\/g,"/")+'/encrypt';
+            savePath = /(\/encrypt)$/.test(savePath)?savePath:savePath.replace(/\\/g,"/")+'/encrypt';
             if(!fs.existsSync(savePath)){
                 fs.mkdirSync(savePath);
             }
@@ -746,7 +753,7 @@ $( function(){
         },function(){
             $("#picBox ul").hide();
             $("#picBox").addClass("box_normal");
-            $("#picBox canvas").css({"display":"block","margin":"10px auto","max-width":"100%"}).show();
+            $("#picBox canvas").css({"display":"block","margin":"10px auto"}).show();
         });
     });
 
@@ -919,7 +926,7 @@ $( function(){
             lessSavePath = $(".show_path").val().replace(/\\/g,"/");
         }else{
             lessSavePath = lessSavePath.replace(/[\/|\\]\w+\.less/,"");
-            lessSavePath = lessSavePath.replace(/\\/g,"/")+'/css';
+            lessSavePath = /(\/css)$/.test(lessSavePath)?lessSavePath:lessSavePath.replace(/\\/g,"/")+'/css';
             if(!fs.existsSync(lessSavePath)){
                 fs.mkdirSync(lessSavePath);
             }
